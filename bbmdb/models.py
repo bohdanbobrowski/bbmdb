@@ -3,6 +3,7 @@
 # author: Bohdan Bobrowski bohdan@bobrowski.com.pl
 
 from django.db import models
+from django.db.models import Count
 import omdb
 
 API_KEY='95667d5d'
@@ -31,7 +32,7 @@ class Movies(models.Model):
 
 class Comments(models.Model):
     comment_id = models.AutoField(primary_key=True)
-    movie_id = models.ForeignKey(Movies, on_delete=models.CASCADE)
+    movie_id = models.ForeignKey(Movies, related_name='comments', on_delete=models.CASCADE)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
