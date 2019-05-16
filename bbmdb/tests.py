@@ -5,7 +5,7 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
-from .models import Movies, Comments
+from .models import Movie, Comment
 from .serializers import MoviesSerializer
 
 
@@ -14,11 +14,11 @@ class BaseViewTest(APITestCase):
 
     @staticmethod
     def add_movie(title, year, imdb_rating, director):
-        Movies.objects.create(title=title, year=year, imdb_rating=imdb_rating, director=director)
+        Movie.objects.create(title=title, year=year, imdb_rating=imdb_rating, director=director)
 
     @staticmethod
     def add_comment(movie_id, comment):
-        Comments.objects.create(movie_id=movie_id,comment=comment)
+        Comment.objects.create(movie_id=movie_id,comment=comment)
 
     def setUp(self):
         self.add_movie("The Grapes of Wrath", 1940, 8.1, "John Ford")
@@ -37,7 +37,7 @@ class MoviesTest(BaseViewTest):
         response = self.client.get(
             reverse('movies')
         )
-        expected = Movies.objects.all()
+        expected = Movie.objects.all()
         serialized = MoviesSerializer(expected, many=True)
         self.assertEqual(response.data, serialized.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
