@@ -23,4 +23,4 @@ class Comments(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "{}. {} [{}] {} - {}/10".format(self.movie_id, self.title, self.year, self.imdb_rating, self.director)
+        return "{}. {} ({})".format(self.comment_id, self.content, self.created)
