@@ -5,7 +5,7 @@
 from django.db import models
 
 
-class Movie(models.Model):
+class Movies(models.Model):
     movie_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255, null=False)
     year = models.IntegerField()
@@ -16,9 +16,9 @@ class Movie(models.Model):
         return "{}. {} [{}] {} - {}/10".format(self.movie_id, self.title, self.year, self.imdb_rating, self.director)
 
 
-class Comment(models.Model):
+class Comments(models.Model):
     comment_id = models.AutoField(primary_key=True)
-    movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie_id = models.ForeignKey(Movies, on_delete=models.CASCADE)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
