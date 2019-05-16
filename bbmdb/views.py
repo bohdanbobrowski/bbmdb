@@ -1,15 +1,12 @@
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.response import Response
 from .models import Movies, Comments
-from .serializers import MoviesSerializer, CommentsSerializer
+from .serializers import MoviesSerializer, CommentsSerializer, TopMoviesSerializer
 
 
 class MoviesListView(generics.ListCreateAPIView):
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -21,19 +18,18 @@ class MoviesListView(generics.ListCreateAPIView):
 
 
 class CommentsListView(generics.ListCreateAPIView):
-    queryset = Comments.objects.all()
-    serializer_class = CommentsSerializer
-
-
-class MovieCommentsView(generics.ListAPIView):
-    queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
 
     def get_queryset(self):
-        return Comments.objects.filter(movie_id=self.kwargs['movie_id'])
+        if 'movie_id' in self.kwargs:
+            return Comments.objects.filter(movie_id=self.kwargs['movie_id'])
+        else:
+            return Comments.objects.all()
 
 
 class TopListView(generics.ListAPIView):
     queryset = Movies.objects.all()
-    serializer_class = MoviesSerializer
+    serializer_class = TopMoviesSerializer
 
+    def get_queryset(self):
+        return Movies.objects.filter()

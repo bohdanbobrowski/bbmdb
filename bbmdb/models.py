@@ -3,7 +3,6 @@
 # author: Bohdan Bobrowski bohdan@bobrowski.com.pl
 
 from django.db import models
-from django.db.models import Count
 import omdb
 
 API_KEY='95667d5d'
@@ -38,3 +37,4 @@ class Comments(models.Model):
 
     def __str__(self):
         return "{}. {} ({})".format(self.comment_id, self.content, self.created)
+
