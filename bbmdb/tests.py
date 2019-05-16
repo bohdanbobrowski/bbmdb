@@ -42,6 +42,7 @@ class MoviesTest(BaseViewTest):
         self.assertEqual(response.data['movie_id'], 1)
         self.assertEqual(response.data['year'], 1940)
         self.assertEqual(response.data['director'], 'John Ford')
+        self.assertEqual(response.data['comments_count'], 2)
 
     def test_get_new_movie(self):
         for i in range(0, 2):
@@ -58,6 +59,21 @@ class CommentsTest(BaseViewTest):
         self.assertEqual(response.data, serialized.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_get_comments_for_selected_movie_id(self):
+        response = self.client.get('/comments/1')
+        expected = Comments.objects.filter(movie_id=1)
+        serialized = CommentsSerializer(expected, many=True)
+        self.assertEqual(response.data, serialized.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_post_comment(self):
-        response = self.client.post('/comments', {'movie_id': 1, "comment": "What a great movie!"})
+        response = self.client.post('/comments', {'movie_id': 1, "content": "What a great movie!"})
+        self.assertEqual(response.data['movie_id'], 1)
+        self.assertEqual(response.data['comment_id'], 4)
+
+
+class TopTest(BaseViewTest):
+
+    def test_top_list(self):
+        response = self.client.get('/top')
         print(response.data)

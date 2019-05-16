@@ -25,12 +25,15 @@ class CommentsListView(generics.ListCreateAPIView):
     serializer_class = CommentsSerializer
 
 
-class MovieCommentsView(generics.ListCreateAPIView):
+class MovieCommentsView(generics.ListAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
 
+    def get_queryset(self):
+        return Comments.objects.filter(movie_id=self.kwargs['movie_id'])
 
-class TopView(generics.ListAPIView):
+
+class TopListView(generics.ListAPIView):
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
 
