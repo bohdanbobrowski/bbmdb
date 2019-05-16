@@ -7,3 +7,4 @@ from django.apps import AppConfig
 
 class BbmdbConfig(AppConfig):
     name = 'bbmdb'
+

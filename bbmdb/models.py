@@ -17,5 +17,10 @@ class Movies(models.Model):
 
 
 class Comments(models.Model):
+    comment_id = models.AutoField(primary_key=True)
     movie_id = models.ForeignKey(Movies, on_delete=models.CASCADE)
     content = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{}. {} [{}] {} - {}/10".format(self.movie_id, self.title, self.year, self.imdb_rating, self.director)

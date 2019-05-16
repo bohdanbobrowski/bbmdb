@@ -1,20 +1,23 @@
 from rest_framework import generics
-from .models import Movies
-from .serializers import MoviesSerializer
+from .models import Movies, Comments
+from .serializers import MoviesSerializer, CommentsSerializer
 
 
-class MoviesView(generics.ListCreateAPIView):
+class MoviesListView(generics.ListCreateAPIView):
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
 
-    def post(self, request, *args, **kwargs):
-        """handle post request here"""
-        pass
+class CommentsListView(generics.ListCreateAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializer
 
-class CommentsView(generics.RetrieveAPIView):
-    pass
+
+class MovieCommentsView(generics.ListCreateAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializer
 
 
 class TopView(generics.ListAPIView):
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
+
