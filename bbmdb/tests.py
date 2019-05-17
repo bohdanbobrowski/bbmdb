@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
 from .models import Movies, Comments
-from .serializers import MoviesSerializer, CommentsSerializer
+from .serializers import MoviesSerializer, MoviesListSerializer, CommentsSerializer
 
 
 class BaseViewTest(APITestCase):
@@ -33,7 +33,7 @@ class MoviesTest(BaseViewTest):
     def test_get_all_movies(self):
         response = self.client.get('/movies')
         expected = Movies.objects.all()
-        serialized = MoviesSerializer(expected, many=True)
+        serialized = MoviesListSerializer(expected, many=True)
         self.assertEqual(response.data, serialized.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

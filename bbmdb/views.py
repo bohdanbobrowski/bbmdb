@@ -1,22 +1,27 @@
 from django.db.models import Count, Q
 from django.utils import timezone
 from datetime import datetime
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import Movies, Comments
-from .serializers import MoviesSerializer, CommentsSerializer, TopMoviesSerializer
+from .serializers import MoviesSerializer, MoviesListSerializer, CommentsSerializer, TopMoviesSerializer
 
 
 class MoviesListView(generics.ListCreateAPIView):
     queryset = Movies.objects.all()
-    serializer_class = MoviesSerializer
+    serializer_class = MoviesListSerializer
 
     def post(self, request, *args, **kwargs):
         try:
             movie = Movies.objects.get(title=request.data['title'])
-            serializer = self.get_serializer(movie)
+            serializer = MoviesSerializer(movie)
             return Response(serializer.data)
         except Movies.DoesNotExist:
+            serializer = MoviesSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
             return self.create(request, *args, **kwargs)
 
 

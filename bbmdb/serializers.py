@@ -12,6 +12,12 @@ class MoviesSerializer(serializers.ModelSerializer):
         fields = ("movie_id", "title", "year", "imdb_rating", "director", "comments_count")
 
 
+class MoviesListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movies
+        fields = ("movie_id", "title")
+
+
 class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
