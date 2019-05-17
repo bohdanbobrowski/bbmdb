@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import generics
 from rest_framework.response import Response
 from .models import Movies, Comments
@@ -32,4 +33,6 @@ class TopListView(generics.ListAPIView):
     serializer_class = TopMoviesSerializer
 
     def get_queryset(self):
-        return Movies.objects.filter()
+        return Movies.objects.filter()\
+            .annotate(comments_count=Count('comments'))\
+            .order_by('-comments_count')

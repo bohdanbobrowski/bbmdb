@@ -4,6 +4,7 @@
 
 from django.db import models
 import omdb
+from django.db.models import Count
 
 API_KEY='95667d5d'
 omdb.set_default('apikey', API_KEY)
@@ -15,6 +16,18 @@ class Movies(models.Model):
     year = models.IntegerField(null=True)
     imdb_rating = models.FloatField(max_length=1, null=True)
     director = models.CharField(max_length=255, null=True)
+
+    def comments_count(self):
+        return self.comments.count()
+
+    def ranking(self):
+        result = Movies.objects \
+            .annotate(comments_count=Count('comments')) \
+            .values('comments_count') \
+            .distinct() \
+            .filter(comments_count__gte=self.comments_count)\
+            .order_by('-comments_count')
+        return len(result)
 
     def save(self, *args, **kwargs):
         if not self.movie_id:
