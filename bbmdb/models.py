@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # author: Bohdan Bobrowski bohdan@bobrowski.com.pl
+import os
 
 from django.db import models
 import omdb
 from django.db.models import Count
+from api.settings import OMDB_API_KEY
 
-API_KEY='95667d5d'
-omdb.set_default('apikey', API_KEY)
+omdb.set_default('apikey', OMDB_API_KEY)
 
 
 class Movies(models.Model):

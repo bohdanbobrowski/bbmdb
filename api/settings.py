@@ -4,6 +4,9 @@
 
 import os
 
+# Set OMDB API key in env
+OMDB_API_KEY = os.environ.get('DJANGO_OMDB_API_KEY')
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
