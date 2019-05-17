@@ -34,15 +34,21 @@ Bassicaly it requires only those three packeges to be installed with **python-pi
 ##### GET
 * __params:__ -
 * __response:__ List of all movies in database.
+**As a bonus I've added pagination to this view - so response looks a little bit different.**
 
 
-    [
-        {
-            "movie_id": [integer],
-            "title": [string],
-        },
-        ...
-    ]
+    {
+        "count": [integer],
+        "next": [string for complete url to next page or null],
+        "previous": [string or null],
+        "results": [
+            {
+                "movie_id": [integer],
+                "title": [string],
+            },
+            ...
+        ]
+    }
 
 ##### POST
 * __params:__ {"title":"_[movie title here]_"}

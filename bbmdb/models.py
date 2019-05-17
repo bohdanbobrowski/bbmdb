@@ -6,6 +6,8 @@ import os
 from django.db import models
 import omdb
 from django.db.models import Count
+from rest_framework.pagination import LimitOffsetPagination
+
 from api.settings import OMDB_API_KEY
 
 omdb.set_default('apikey', OMDB_API_KEY)
@@ -41,6 +43,10 @@ class Movies(models.Model):
 
     def __str__(self):
         return "{}. {} [{}] {} - {}/10".format(self.movie_id, self.title, self.year, self.imdb_rating, self.director)
+
+
+class MoviesPagination(LimitOffsetPagination):
+    default_limit = 5
 
 
 class Comments(models.Model):

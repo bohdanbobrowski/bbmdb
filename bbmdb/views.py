@@ -3,13 +3,14 @@ from django.utils import timezone
 from datetime import datetime
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .models import Movies, Comments
+from .models import Movies, Comments, MoviesPagination
 from .serializers import MoviesSerializer, MoviesListSerializer, CommentsSerializer, TopMoviesSerializer
 
 
 class MoviesListView(generics.ListCreateAPIView):
     queryset = Movies.objects.all()
     serializer_class = MoviesListSerializer
+    pagination_class = MoviesPagination
 
     def post(self, request, *args, **kwargs):
         try:
