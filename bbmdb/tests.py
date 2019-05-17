@@ -76,4 +76,10 @@ class TopTest(BaseViewTest):
 
     def test_top_list(self):
         response = self.client.get('/top')
-        print(response.data)
+        self.assertEqual(response.data[0]['comments_count'], 2)
+        self.assertEqual(response.data[1]['comments_count'], 1)
+
+    def test_top_list_filteres(self):
+        response = self.client.get('/top/1939-09-01/1945-05-08')
+        self.assertEqual(response.data[0]['comments_count'], 0)
+        self.assertEqual(response.data[1]['comments_count'], 0)

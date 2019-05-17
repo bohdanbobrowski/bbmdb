@@ -10,4 +10,5 @@ urlpatterns = [
     path('comments', CommentsListView.as_view()),
     path('comments/<movie_id>', CommentsListView.as_view()),
     path('top', TopListView.as_view()),
+    path('top/<from>/<to>', TopListView.as_view()),
 ]

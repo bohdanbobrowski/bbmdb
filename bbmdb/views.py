@@ -1,4 +1,6 @@
-from django.db.models import Count
+from django.db.models import Count, Q
+from django.utils import timezone
+from datetime import datetime
 from rest_framework import generics
 from rest_framework.response import Response
 from .models import Movies, Comments
@@ -29,10 +31,25 @@ class CommentsListView(generics.ListCreateAPIView):
 
 
 class TopListView(generics.ListAPIView):
-    queryset = Movies.objects.all()
     serializer_class = TopMoviesSerializer
 
-    def get_queryset(self):
-        return Movies.objects.filter()\
-            .annotate(comments_count=Count('comments'))\
+    def get(self, request, *args, **kwargs):
+        # optional date range filtering here:
+        if 'from' in kwargs and 'to' in kwargs:
+            datetime_from = timezone.make_aware(datetime.strptime(kwargs['from'], '%Y-%m-%d'), timezone.get_current_timezone())
+            datetime_to = timezone.make_aware(datetime.strptime(kwargs['to'], '%Y-%m-%d'), timezone.get_current_timezone())
+            count_query = Count('comments', filter=Q(
+                comments__created__gte=datetime_from, comments__created__lte=datetime_to
+            ))
+        else:
+            count_query = Count('comments')
+        queryset = Movies.objects \
+            .annotate(comments_count=count_query) \
             .order_by('-comments_count')
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
