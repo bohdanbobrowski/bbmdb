@@ -3,6 +3,7 @@
 # author: Bohdan Bobrowski bohdan@bobrowski.com.pl
 
 import os
+import django_heroku
 
 # Set OMDB API key in env
 OMDB_API_KEY = os.environ.get('DJANGO_OMDB_API_KEY')
@@ -117,3 +118,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
